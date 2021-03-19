@@ -26,5 +26,17 @@ router.post(
 );
 router.get("/", controllers.getPosts);
 router.delete("/:id", [authorize], controllers.deletePost);
+router.post(
+  "/likedislike/:id",
+  [
+    authorize,
+    check(
+      "action",
+      "You must provide action of that equals true, false, delete in string form"
+    ).notEmpty()
+  ],
+  controllers.likeDislike
+);
+router.get("/likedislike/:id", [authorize], controllers.checkLikeDislikeStatus);
 
 export default router;

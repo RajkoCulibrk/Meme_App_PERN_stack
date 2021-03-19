@@ -59,3 +59,47 @@ export const deletePost = async (req, res, next) => {
     next(ApiError.internal(err.message));
   }
 };
+
+export const likeDislike = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(ApiError.badRequest(errors.errors[0].msg));
+  }
+  try {
+    const post_id = req.params.id;
+    const user_id = req.user;
+    const { action } = req.body;
+
+    if (action === "delete") {
+      await pool.query(
+        "DELETE FROM likesdislikes WHERE user_id= $1 AND post_id = $2",
+        [user_id, post_id]
+      );
+      return res.status(204).json({ data: { status: false } });
+    }
+    const result = await pool.query(
+      "INSERT INTO likesdislikes (post_id, user_id, value) VALUES ($1, $2 ,$3) ON CONFLICT (post_id, user_id) DO UPDATE SET value = EXCLUDED.value RETURNING *",
+      [post_id, user_id, action]
+    );
+    res.status(202).json({ data: { status: result.rows[0].value } });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const checkLikeDislikeStatus = async (req, res, next) => {
+  try {
+    const post_id = req.params.id;
+    const user_id = req.user;
+    const result = await pool.query(
+      "SELECT * FROM  likesdislikes WHERE user_id = $1 AND post_id = $2",
+      [user_id, post_id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(200).json({ data: { status: false } });
+    }
+    return res.status(200).json({ data: { status: result.rows[0].value } });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
