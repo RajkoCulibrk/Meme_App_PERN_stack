@@ -41,4 +41,39 @@ export const loginController = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(ApiError.badRequest(errors.errors[0].msg));
   }
+  try {
+    const { email, password } = req.body;
+    const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [
+      email
+    ]);
+    if (user.rows.length === 0) {
+      return next(ApiError.notAuthenticated("Password or email is incorect"));
+    }
+    const confirmPassword = await bcrypt.compare(
+      password,
+      user.rows[0].user_password
+    );
+    if (!confirmPassword) {
+      return next(ApiError.notAuthenticated("Password or email is incorect"));
+    }
+    const token = jwtGenerator(user.rows[0].user_id);
+    res.status(200).json({ data: { token } });
+  } catch (err) {
+    console.log(err);
+    return next(ApiError.internal(err.message));
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const userId = req.user;
+    const user = await pool.query(
+      "SELECT user_name ,user_email FROM users WHERE user_id = $1",
+      [userId]
+    );
+    res.status(200).json({ data: { user: user.rows[0] } });
+  } catch (err) {
+    return next(ApiError.notAuthenticated("You are not authorized"));
+    console.log(err);
+  }
 };
