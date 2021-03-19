@@ -15,6 +15,9 @@ export default class ApiError {
   static notAuthorized(msg) {
     return new ApiError(403, msg);
   }
+  static notFound(msg) {
+    return new ApiError(400, msg);
+  }
 
   static notAuthenticated(msg) {
     return new ApiError(401, msg);

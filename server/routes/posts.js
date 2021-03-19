@@ -5,6 +5,7 @@ import * as controllers from "../controllers/postsControllers.js";
 import validator from "express-validator";
 const { check } = validator;
 import upload from "../middleware/multer.js";
+
 router.post(
   "/",
   [
@@ -23,5 +24,7 @@ router.post(
   ],
   controllers.addPost
 );
+router.get("/", controllers.getPosts);
+router.delete("/:id", [authorize], controllers.deletePost);
 
 export default router;

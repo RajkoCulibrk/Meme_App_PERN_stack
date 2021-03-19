@@ -25,3 +25,37 @@ export const addPost = async (req, res, next) => {
     next(ApiError.internal(err.message));
   }
 };
+
+export const getPosts = async (req, res, next) => {
+  try {
+    const posts = await pool.query("SELECT * FROM posts");
+    console.log(posts);
+    res.status(200).json({ data: { posts: posts.rows } });
+  } catch (err) {
+    console.log(err.message);
+    next(ApiError.internal(err.message));
+  }
+};
+
+export const deletePost = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const user_id = req.user;
+    const postToBeDeleted = await pool.query(
+      "SELECT * FROM posts WHERE post_id = $1",
+      [id]
+    );
+    if (postToBeDeleted.rows.length == 0) {
+      return next(ApiError.notFound("Post not found"));
+    }
+    if (postToBeDeleted.rows[0].user_id !== user_id) {
+      return next(ApiError.notAuthorized("You are unauthorized"));
+    }
+    await cloudinary.uploader.destroy(postToBeDeleted.rows[0].image_public_id);
+    await pool.query("DELETE FROM posts WHERE post_id = $1", [id]);
+    res.status(204).send();
+  } catch (err) {
+    console.log(err.message);
+    next(ApiError.internal(err.message));
+  }
+};
