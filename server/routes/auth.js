@@ -1,11 +1,9 @@
 import express from "express";
-import bcrypt from "bcrypt";
+
 import validator from "express-validator";
 const { check, validationResult } = validator;
 import * as authControllers from "../controllers/authControllers.js";
 import authorization from "../middleware/authorization.js";
-import pool from "../db/index.js";
-import jwtGenerator from "../utility/jwtGenerator.js";
 
 const router = express.Router();
 
@@ -33,6 +31,6 @@ router.post(
   authControllers.loginController
 );
 
-router.post("/user", [authorization], authControllers.getUser);
+router.get("/user", [authorization], authControllers.getUser);
 
 export default router;

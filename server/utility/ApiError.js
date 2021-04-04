@@ -1,3 +1,4 @@
+/* class for handling errors  it takes the code and message in the constructor and has static methods for sending back messages with predefined codes */
 export default class ApiError {
   constructor(code, message) {
     this.code = code;
@@ -16,7 +17,7 @@ export default class ApiError {
     return new ApiError(403, msg);
   }
   static notFound(msg) {
-    return new ApiError(400, msg);
+    return new ApiError(404, msg);
   }
 
   static notAuthenticated(msg) {
