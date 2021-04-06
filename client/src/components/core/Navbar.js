@@ -14,14 +14,16 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link, useLocation } from "react-router-dom";
-import { Button, useMediaQuery } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { logout } from "../../redux/slices/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+import logo from "../../images/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1
   },
   menuButton: {
-    marginRight: theme.spacing(2),
     display: "none",
     [theme.breakpoints.down("sm")]: {
       display: "block"
@@ -85,12 +87,21 @@ const useStyles = makeStyles((theme) => ({
   nav_links: {
     color: "white",
     decoration: "none"
+  },
+  logo: {
+    margin: "0px",
+    padding: "0px"
   }
 }));
 
 export default function PrimarySearchAppBar() {
   /* my code start */
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { pathname } = useLocation();
+  const logoutUser = () => {
+    dispatch(logout());
+  };
 
   /* my code  end*/
   const classes = useStyles();
@@ -128,7 +139,14 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          logoutUser();
+        }}
+      >
+        Logout
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -144,7 +162,7 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {pathname === "/register" && (
+      {pathname !== "/login" && !user && (
         <MenuItem>
           <Button color="inherit">
             {" "}
@@ -157,7 +175,7 @@ export default function PrimarySearchAppBar() {
           </Button>
         </MenuItem>
       )}
-      {pathname === "/login" && (
+      {pathname !== "/register" && !user && (
         <MenuItem>
           <Button color="inherit">
             {" "}
@@ -199,8 +217,19 @@ export default function PrimarySearchAppBar() {
             {/*  {`(min-width:600px) matches: ${matches}`} */}
             <MenuIcon />
           </IconButton>
+          <Link to="/">
+            {" "}
+            <IconButton
+              className={classes.logo}
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <img className="logo" src={logo} alt="Logo" />
+            </IconButton>
+          </Link>
+
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            Dank Memes
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -217,7 +246,7 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {pathname === "/register" && (
+            {pathname !== "/login" && !user && (
               <IconButton
                 aria-label="show 17 new notifications"
                 color="inherit"
@@ -231,7 +260,7 @@ export default function PrimarySearchAppBar() {
               </IconButton>
             )}
 
-            {pathname === "/login" && (
+            {pathname !== "/register" && !user && (
               <IconButton
                 aria-label="show 17 new notifications"
                 color="inherit"

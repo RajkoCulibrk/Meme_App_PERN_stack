@@ -32,6 +32,10 @@ const signinRegisterStyles = makeStyles((theme) => ({
       minWidth: "30px",
       maxWidth: "90%"
     }
+  },
+  avatar: {
+    width: "100px",
+    height: "100px"
   }
 }));
 

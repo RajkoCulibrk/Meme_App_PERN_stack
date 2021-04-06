@@ -2,18 +2,22 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  makeStyles,
   Box,
   Button,
-  TextField
+  TextField,
+  Avatar
 } from "@material-ui/core";
+import placeholder from "../images/avatar.png";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useInput from "../hooks/RegisterPageHook";
 import useStyles from "../materialThemes/signinRegister";
-
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/UserActions";
+import Error from "../components/core/Error";
 const Login = () => {
   const classes = useStyles();
+  const { errors: errorMessages } = useSelector((state) => state.user);
   const [data, handleChange, errors] = useInput();
   const [touched, setTouched] = useState({
     name: false,
@@ -21,10 +25,11 @@ const Login = () => {
     password: false,
     confirmPassword: false
   });
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    dispatch(login({ email: data.email, password: data.password }));
   };
 
   return (
@@ -35,7 +40,6 @@ const Login = () => {
       justifyContent="center"
       height="90vh"
     >
-      <h3>Login</h3>
       <form onSubmit={(e) => handleSubmit(e)} style={{ width: "100%" }}>
         <Grid
           className={classes.regulator}
@@ -45,6 +49,12 @@ const Login = () => {
           justify="center"
           spacing={10}
         >
+          <h3>Login</h3>
+          <Avatar
+            className={classes.avatar}
+            alt="Remy Sharp"
+            src={placeholder}
+          />
           <FormControl className={classes.formInput}>
             <TextField
               variant="outlined"
@@ -52,6 +62,7 @@ const Login = () => {
               onBlur={() => setTouched({ ...touched, email: true })}
               onChange={(e) => handleChange(e)}
               name="email"
+              error={touched.email && data.email === ""}
               type="email"
               id="email"
               label="Email"
@@ -71,6 +82,10 @@ const Login = () => {
               onBlur={() => setTouched({ ...touched, password: true })}
               name="password"
               type="password"
+              error={
+                (data.password === "" && touched.password) ||
+                (errors.passwordLength && touched.password)
+              }
               label="Password"
               id="password"
               aria-describedby="my-helper-text"
@@ -101,6 +116,11 @@ const Login = () => {
               Submit
             </Button>
           </Box>
+
+          {errorMessages.map((error) => (
+            <Error key={error.id} error={error} />
+          ))}
+
           <Box
             m={2}
             display="flex"

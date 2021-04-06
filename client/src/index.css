@@ -22,3 +22,8 @@ code {
   color: rgb(49, 111, 206);
   text-decoration: none;
 }
+
+.logo {
+  width: 50px;
+  color: #ffffff;
+}

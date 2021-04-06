@@ -2,19 +2,24 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  makeStyles,
   Box,
   Button,
-  TextField
+  TextField,
+  Avatar
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useInput from "../hooks/RegisterPageHook";
 import useStyles from "../materialThemes/signinRegister";
-
+import placeholder from "../images/avatar.png";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/actions/UserActions";
+import Error from "../components/core/Error";
 const Login = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [data, handleChange, errors] = useInput();
+  const { errors: errorMessages } = useSelector((state) => state.user);
   const [touched, setTouched] = useState({
     name: false,
     email: false,
@@ -24,7 +29,8 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    const { name, password, email } = data;
+    dispatch(register({ name, password, email }));
   };
 
   return (
@@ -35,7 +41,6 @@ const Login = () => {
       justifyContent="center"
       height="90vh"
     >
-      <h3>Register</h3>
       <form onSubmit={(e) => handleSubmit(e)} style={{ width: "100%" }}>
         <Grid
           className={classes.regulator}
@@ -45,6 +50,12 @@ const Login = () => {
           justify="center"
           spacing={10}
         >
+          <h3>Register</h3>
+          <Avatar
+            className={classes.avatar}
+            alt="Remy Sharp"
+            src={placeholder}
+          />
           <FormControl className={classes.formInput}>
             <TextField
               value={data.name}
@@ -52,6 +63,7 @@ const Login = () => {
               onChange={(e) => handleChange(e)}
               onBlur={() => setTouched({ ...touched, name: true })}
               id="name"
+              error={touched.name && data.name === ""}
               name="name"
               label="Username"
               aria-describedby="my-helper-text"
@@ -69,6 +81,7 @@ const Login = () => {
               onBlur={() => setTouched({ ...touched, email: true })}
               onChange={(e) => handleChange(e)}
               name="email"
+              error={touched.email && data.email === ""}
               type="email"
               id="email"
               label="Email"
@@ -90,6 +103,10 @@ const Login = () => {
               type="password"
               label="Password"
               id="password"
+              error={
+                (errors.passwordLength && touched.password) ||
+                (data.password === "" && touched.password)
+              }
               aria-describedby="my-helper-text"
             />
             {errors.passwordLength && touched.password && (
@@ -113,6 +130,10 @@ const Login = () => {
               name="confirmPassword"
               type="password"
               id="confirm-password"
+              error={
+                (errors.passwordMissmatch && touched.confirmPassword) ||
+                (data.confirmPassword === "" && touched.confirmPassword)
+              }
               aria-describedby="my-helper-text"
             />
             {errors.passwordMissmatch && touched.confirmPassword && (
@@ -144,6 +165,9 @@ const Login = () => {
               Submit
             </Button>
           </Box>
+          {errorMessages.map((error) => (
+            <Error key={error.id} error={error} />
+          ))}
           <Box
             m={2}
             display="flex"
