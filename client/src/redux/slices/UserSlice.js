@@ -48,7 +48,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.loadingUser = false;
-      console.log(action.payload, "user that got to red");
+
       state.user = action.payload;
     });
     builder.addCase(getUser.rejected, (state, action) => {
@@ -64,7 +64,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.loadingUser = false;
-      console.log(action.payload, "user that got to red");
+
       state.user = action.payload;
     });
     builder.addCase(register.rejected, (state, action) => {

@@ -7,6 +7,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
 }
+html {
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
+}
+
+.App {
+  height: 100%;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

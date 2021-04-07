@@ -9,7 +9,7 @@ const Error = ({ error }) => {
     setTimeout(() => {
       dispatch(deleteError(error.id));
     }, 3000);
-  }, []);
+  }, [dispatch, error.id]);
   return (
     <Box m={0.3}>
       <Alert variant="filled" severity="error">
