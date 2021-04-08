@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPosts } from "../actions/PostsActions";
 
-const createErrorObject = (message) => {
-  return { id: Date.now(), message };
-};
 export const postsSlice = createSlice({
   name: "posts",
   initialState: {
