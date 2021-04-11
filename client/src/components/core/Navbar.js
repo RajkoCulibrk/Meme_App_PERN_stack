@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-
+import CancelIcon from "@material-ui/icons/Cancel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -14,11 +14,13 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { logout } from "../../redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../images/logo.svg";
 import { openCloseSideNav } from "../../redux/slices/UtilitySlice";
+import { search } from "../../redux/slices/PostsSlice";
+import { getPosts } from "../../redux/actions/PostsActions";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1
@@ -37,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     position: "relative",
+    display: "flex",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
@@ -93,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "0px"
   },
   navbar: {
-    zIndex: 999999999,
+    zIndex: 9999,
     position: "fixed",
     transition: "all 0.3s ease"
   }
@@ -102,17 +105,31 @@ const useStyles = makeStyles((theme) => ({
 export default function PrimarySearchAppBar() {
   /* my code start */
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const {
+    user: { user },
+    posts: { like }
+  } = useSelector((state) => state);
   const { pathname } = useLocation();
   const logoutUser = () => {
     dispatch(logout());
   };
+  const location = useLocation();
 
+  const handleSearch = (e) => {
+    dispatch(search(e.target.value));
+    dispatch(getPosts());
+  };
+
+  const resetSearch = () => {
+    dispatch(search(""));
+    dispatch(getPosts());
+  };
   let current = useRef(0);
 
   const handleSidenavOpening = () => {
     dispatch(openCloseSideNav());
   };
+
   useEffect(() => {
     const navbar = document.querySelector(".makeStyles-navbar-12");
     document.addEventListener("scroll", () => {
@@ -170,7 +187,6 @@ export default function PrimarySearchAppBar() {
       >
         Logout
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -211,18 +227,19 @@ export default function PrimarySearchAppBar() {
           </Button>
         </MenuItem>
       )}
-
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      {user && (
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -254,19 +271,29 @@ export default function PrimarySearchAppBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             Dank Memes
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+          {location.pathname === "/" && (
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                onChange={(e) => handleSearch(e)}
+                placeholder="Search…"
+                value={like}
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
+              {like && (
+                <Box onClick={resetSearch} display="flex" alignItems="center">
+                  <CancelIcon />
+                </Box>
+              )}
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+          )}
+
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {pathname !== "/login" && !user && (

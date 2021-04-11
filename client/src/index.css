@@ -39,3 +39,11 @@ code {
   width: 50px;
   color: #ffffff;
 }
+
+#primary-search-account-menu {
+  z-index: 999999999999 !important;
+}
+
+#primary-search-account-menu-mobile {
+  z-index: 999999999999 !important;
+}

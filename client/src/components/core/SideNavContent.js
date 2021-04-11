@@ -11,35 +11,49 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { Link } from "react-router-dom";
-
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Box, TextField } from "@material-ui/core";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SortingAndOrdering from "./SortingAndOrdering";
+import logo from "../../images/logo_black.svg";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column"
   },
   list: {
-    marginTop: "3rem"
+    marginTop: "4rem"
+  },
+  capitalize: {
+    display: "flex",
+    textTransform: "uppercase",
+    margin: "1rem"
+  },
+  marginRight: {
+    marginRight: "0.5rem"
   }
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft({ marginTop }) {
   const classes = useStyles();
+  const location = useLocation();
 
+  const { user } = useSelector((state) => state.user);
   return (
     <div className={classes.root}>
-      <Divider />
+      {user && marginTop && (
+        <Box className={classes.capitalize} display="flex" alignItems="center">
+          <AccountCircleIcon className={classes.marginRight} /> {user.user_name}
+        </Box>
+      )}
+      {marginTop && !user && (
+        <Box marginLeft={3}>
+          <img width={50} src={logo} alt="logo" />
+        </Box>
+      )}
 
-      <List className={classes.list}>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+      <Divider />
       <Divider />
       <List>
         <Link
@@ -67,6 +81,11 @@ export default function PersistentDrawerLeft() {
           </ListItem>
         </Link>
       </List>
+      {location.pathname === "/" && (
+        <List>
+          <SortingAndOrdering />
+        </List>
+      )}
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function Holder() {
             paper: classes.drawerPaper
           }}
         >
-          <SideNavContent />
+          <SideNavContent marginTop={true} />
         </Drawer>
       </Box>
       <Box className={classes.main}>
