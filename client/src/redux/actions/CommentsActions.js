@@ -39,10 +39,31 @@ export const addComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   "comments/deleteComment",
-  async (id, { rejectWithValue }) => {
+  async ({ id, history, location, idFromUrl }, { rejectWithValue }) => {
     try {
       await axios.delete(`comments/${id}`);
+      console.log(location);
+      if (location.pathname.includes("comment") && id === idFromUrl) {
+        history.goBack();
+      }
       return id;
+    } catch (err) {
+      console.log(err);
+      if (err.response?.data.msg) {
+        return rejectWithValue(err.response.data.msg);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+export const getSubcomments = createAsyncThunk(
+  "comments/getSubcomments",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`comments/subcomments/${id}`);
+      return data.data.comments;
     } catch (err) {
       console.log(err);
       if (err.response?.data.msg) {

@@ -23,7 +23,7 @@ import { Box, Collapse } from "@material-ui/core";
 import TimeComponent from "./core/TimeComponent";
 import useStyles from "../materialThemes/SingleComment";
 import { deleteComment } from "../redux/actions/CommentsActions";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -39,28 +39,41 @@ export default function SingleComment({ comment }) {
   const classes = useStyles();
   const location = useLocation();
   const history = useHistory();
+  const { id } = useParams();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { checkLikingStatus, likingStatus, likeDislike } = useLikeDislike(true);
+  const {
+    checkLikingStatus,
+    likingStatus,
+    likeDislike,
+    setMounted
+  } = useLikeDislike(true);
 
   useEffect(() => {
+    console.log("rendering single comment");
     if (user) {
-      console.log(";checking");
       checkLikingStatus(comment.comment_id);
+
+      return function cleanup() {
+        setMounted(false);
+      };
     }
     // eslint-disable-next-line
   }, []);
 
   const handleDelete = () => {
-    dispatch(deleteComment(comment.comment_id));
+    dispatch(
+      deleteComment({
+        id: comment.comment_id,
+        history,
+        location,
+        idFromUrl: id
+      })
+    );
   };
   const [expanded, setExpanded] = useState(false);
 
   const url = `/post/${comment.post_id}/comment/${comment.reply_to}`;
-
-  const navigate = () => {
-    history.push(url);
-  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -73,7 +86,7 @@ export default function SingleComment({ comment }) {
             {comment.user_name.charAt(0).toUpperCase()}
           </Avatar>
         }
-        action={
+        /*  action={
           user?.user_id === comment.user_id ? (
             <IconButton onClick={handleDelete} aria-label="settings">
               <DeleteIcon color="secondary" />
@@ -81,7 +94,7 @@ export default function SingleComment({ comment }) {
           ) : (
             ""
           )
-        }
+        } */
         title={
           <Box
             display="flex"
@@ -112,9 +125,14 @@ export default function SingleComment({ comment }) {
       />
 
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {comment.body.charAt(0).toUpperCase() + comment.body.substring(1)}
-        </Typography>
+        <Link
+          style={{ color: "inherit", textDecoration: "none" }}
+          to={`/post/${comment.post_id}/comment/${comment.comment_id}`}
+        >
+          <Typography variant="body2" color="textSecondary" component="p">
+            {comment.body.charAt(0).toUpperCase() + comment.body.substring(1)}
+          </Typography>
+        </Link>
       </CardContent>
 
       <CardActions className={classes.actions}>
@@ -141,13 +159,27 @@ export default function SingleComment({ comment }) {
           </StyledBadge>
         </IconButton>
         <IconButton aria-label="comments">
-          <StyledBadge badgeContent={comment.subcomments} color="primary">
-            <CommentIcon />
-          </StyledBadge>
+          <Link
+            style={{ color: "inherit" }}
+            to={`/post/${comment.post_id}/comment/${comment.comment_id}`}
+          >
+            <StyledBadge badgeContent={comment.subcomments} color="primary">
+              <CommentIcon />
+            </StyledBadge>
+          </Link>
         </IconButton>
         <IconButton onClick={handleExpandClick} aria-label="show more">
           <ReplyIcon />
         </IconButton>
+        {user?.user_id === comment.user_id && (
+          <IconButton
+            style={{ marginLeft: "auto" }}
+            onClick={handleDelete}
+            aria-label="settings"
+          >
+            <DeleteIcon color="secondary" />
+          </IconButton>
+        )}
       </CardActions>
 
       <Collapse key={comment.comment_id} in={expanded} timeout="auto">

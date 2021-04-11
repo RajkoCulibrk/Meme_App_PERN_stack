@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getUser, login, register } from "../actions/UserActions";
+
 const tokenFromStorrage = localStorage.getItem("token");
 const userFromStorrage = localStorage.getItem("user");
 const createErrorObject = (message) => {

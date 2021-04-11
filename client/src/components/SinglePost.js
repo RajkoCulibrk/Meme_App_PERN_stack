@@ -8,13 +8,16 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownAltIcon from "@material-ui/icons/ThumbDownAlt";
 import CommentIcon from "@material-ui/icons/Comment";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@material-ui/icons/Delete";
+
 import Badge from "@material-ui/core/Badge";
 import singlePostStyle from "../materialThemes/singlePostStyle";
 import { CardActionArea, withStyles } from "@material-ui/core";
 import useLikeDislike from "../hooks/LikeDislike";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import TimeComponent from "./core/TimeComponent";
+import { deletePost } from "../redux/actions/PostsActions";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -29,25 +32,50 @@ const StyledBadge = withStyles((theme) => ({
 export default function SinglePost({ post }) {
   const classes = singlePostStyle();
   const { user } = useSelector((state) => state.user);
-
-  const { checkLikingStatus, likingStatus, likeDislike } = useLikeDislike();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+  const {
+    checkLikingStatus,
+    likingStatus,
+    likeDislike,
+    setMounted
+  } = useLikeDislike();
+  const handleDelete = () => {
+    dispatch(deletePost({ id: post.post_id, history, location }));
+  };
   useEffect(() => {
-    if (user) {
+    let mounted = true;
+    if (user && mounted) {
       console.log(";checking");
       checkLikingStatus(post.post_id);
     }
+    return function cleanup() {
+      setMounted(false);
+    };
     // eslint-disable-next-line
   }, []);
   return (
     <Card className={classes.root}>
       <CardHeader
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          user?.user_id === post.user_id ? (
+            <IconButton onClick={handleDelete} aria-label="settings">
+              <DeleteIcon color="secondary" />
+            </IconButton>
+          ) : (
+            ""
+          )
         }
-        title={post.title}
-        subheader={post.created_at}
+        title={
+          <Link
+            style={{ color: "inherit", textDecoration: "none" }}
+            to={`/post/${post.post_id}`}
+          >
+            {post.title.charAt(0).toUpperCase() + post.title.substring(1)}
+          </Link>
+        }
+        subheader={<TimeComponent date={post.created_at} />}
       />
       <Link to={`/post/${post.post_id}`}>
         <CardActionArea>
@@ -84,9 +112,11 @@ export default function SinglePost({ post }) {
           </StyledBadge>
         </IconButton>
         <IconButton aria-label="comments">
-          <StyledBadge badgeContent={post.comments} color="primary">
-            <CommentIcon />
-          </StyledBadge>
+          <Link style={{ color: "inherit" }} to={`/post/${post.post_id}`}>
+            <StyledBadge badgeContent={post.comments} color="primary">
+              <CommentIcon />
+            </StyledBadge>
+          </Link>
         </IconButton>
       </CardActions>
     </Card>

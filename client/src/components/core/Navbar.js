@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -18,7 +18,7 @@ import { Button } from "@material-ui/core";
 import { logout } from "../../redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../images/logo.svg";
-
+import { openCloseSideNav } from "../../redux/slices/UtilitySlice";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1
@@ -91,6 +91,11 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     margin: "0px",
     padding: "0px"
+  },
+  navbar: {
+    zIndex: 999999999,
+    position: "fixed",
+    transition: "all 0.3s ease"
   }
 }));
 
@@ -103,6 +108,24 @@ export default function PrimarySearchAppBar() {
     dispatch(logout());
   };
 
+  let current = useRef(0);
+
+  const handleSidenavOpening = () => {
+    dispatch(openCloseSideNav());
+  };
+  useEffect(() => {
+    const navbar = document.querySelector(".makeStyles-navbar-12");
+    document.addEventListener("scroll", () => {
+      let scrolled = window.pageYOffset;
+      if (current.current - scrolled < 0) {
+        navbar.style.transform = "translateY(-120%)";
+      } else {
+        navbar.style.transform = "translateY(0%)";
+      }
+
+      current.current = window.pageYOffset;
+    });
+  }, []);
   /* my code  end*/
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -205,16 +228,16 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar className={classes.navbar} position="static">
         <Toolbar>
           <IconButton
+            onClick={handleSidenavOpening}
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
             display="none"
           >
-            {/*  {`(min-width:600px) matches: ${matches}`} */}
             <MenuIcon />
           </IconButton>
           <Link to="/">

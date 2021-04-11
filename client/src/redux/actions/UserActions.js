@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import { toast } from "react-toastify";
 import axios from "../../utility/axiosConfiguration";
 
 export const login = createAsyncThunk(
@@ -10,6 +10,9 @@ export const login = createAsyncThunk(
       const response = await axios.post("auth/login", data);
       localStorage.setItem("token", response.data.data.token);
       dispatch(getUser());
+      toast.info("Wellcome !", {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
       return response.data.data.token;
     } catch (err) {
       if (err.response?.data.msg) {
@@ -29,6 +32,9 @@ export const register = createAsyncThunk(
       const response = await axios.post("auth/register", data);
       localStorage.setItem("token", response.data.data.token);
       dispatch(getUser());
+      toast.success("You have successfully created your account !", {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
       return response.data.data.token;
     } catch (err) {
       if (err.response?.data.msg) {

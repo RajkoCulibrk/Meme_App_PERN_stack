@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPosts } from "../actions/PostsActions";
-
+import { deletePost, getPosts } from "../actions/PostsActions";
+import { toast } from "react-toastify";
 export const postsSlice = createSlice({
   name: "posts",
   initialState: {
@@ -9,7 +9,8 @@ export const postsSlice = createSlice({
     page: 1,
     like: "",
     order_by: "created_at",
-    order: 1
+    order: 1,
+    noMoreContent: false
   },
   reducers: {
     logout: (state) => {
@@ -29,11 +30,24 @@ export const postsSlice = createSlice({
       state.loadingPosts = true;
     });
     builder.addCase(getPosts.fulfilled, (state, action) => {
-      state.posts = [...action.payload];
       state.loadingPosts = false;
+      if (action.payload.length < 1) {
+        state.noMoreContent = true;
+      } else {
+        state.posts = [...state.posts, ...action.payload];
+      }
+      state.page++;
     });
     builder.addCase(getPosts.rejected, (state, action) => {
       state.loadingPosts = false;
+    });
+    builder.addCase(deletePost.fulfilled, (state, action) => {
+      state.posts = state.posts.filter(
+        (post) => post.post_id !== action.payload
+      );
+      toast.error("Post deleted successfully!", {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
     });
   }
 });

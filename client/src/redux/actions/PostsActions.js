@@ -27,3 +27,26 @@ export const getPosts = createAsyncThunk(
     }
   }
 );
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (
+    { id, history, location },
+    { rejectWithValue, dispatch, getState }
+  ) => {
+    try {
+      await axios.delete(`posts/${id}`);
+      if (location.pathname.includes("post")) {
+        history.push("/");
+      }
+      return id;
+    } catch (err) {
+      console.log(err);
+      if (err.response?.data.msg) {
+        return rejectWithValue(err.response.data.msg);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
