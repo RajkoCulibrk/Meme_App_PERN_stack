@@ -41,7 +41,10 @@ const Login = () => {
       justifyContent="center"
       height="90vh"
     >
-      <form onSubmit={(e) => handleSubmit(e)} style={{ width: "100%" }}>
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        style={{ width: "100%", marginTop: "5rem" }}
+      >
         <Grid
           className={classes.regulator}
           container
