@@ -171,7 +171,7 @@ export default function SingleComment({ comment }) {
         <IconButton onClick={handleExpandClick} aria-label="show more">
           <ReplyIcon />
         </IconButton>
-        {user?.user_id === comment.user_id && (
+        {(user?.user_id === comment.user_id || user?.user_role === "admin") && (
           <IconButton
             style={{ marginLeft: "auto" }}
             onClick={handleDelete}

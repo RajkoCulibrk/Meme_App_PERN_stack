@@ -131,6 +131,11 @@ export const deletePost = async (req, res, next) => {
   try {
     const id = req.params.id;
     const user_id = req.user;
+    const userReslut = await pool.query(
+      "SELECT * FROM users WHERE user_id = $1",
+      [user_id]
+    );
+    const user = userReslut.rows[0];
     /* check if the post exists if not send 404 error */
     const postToBeDeleted = await pool.query(
       "SELECT * FROM posts WHERE post_id = $1",
@@ -140,7 +145,10 @@ export const deletePost = async (req, res, next) => {
       return next(ApiError.notFound("Post not found"));
     }
     /* if the author of the post is not the same as the logged in user send error unauthorized */
-    if (postToBeDeleted.rows[0].user_id !== user_id) {
+    if (
+      postToBeDeleted.rows[0].user_id !== user_id &&
+      user.user_role == "user"
+    ) {
       return next(ApiError.notAuthorized("You are unauthorized"));
     }
     /* delete the image of the post based on the  image_public_id field from the posts table in db*/

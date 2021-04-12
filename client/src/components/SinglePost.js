@@ -59,7 +59,7 @@ export default function SinglePost({ post }) {
     <Card className={classes.root}>
       <CardHeader
         action={
-          user?.user_id === post.user_id ? (
+          user?.user_id === post.user_id || user?.user_role === "admin" ? (
             <IconButton onClick={handleDelete} aria-label="settings">
               <DeleteIcon color="secondary" />
             </IconButton>

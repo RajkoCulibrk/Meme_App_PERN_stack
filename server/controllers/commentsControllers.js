@@ -128,8 +128,14 @@ export const getSubcomments = async (req, res, next) => {
 export const deleteComment = async (req, res, next) => {
   try {
     const comment_id = req.params.id;
-    const user = req.user;
+    const userId = req.user;
+    const userReslut = await pool.query(
+      "SELECT * FROM users WHERE user_id = $1",
+      [userId]
+    );
+    const user = userReslut.rows[0];
     /* check if comment exists if not send 404 */
+
     const commentToDelete = await pool.query(
       "SELECT * FROM comments_view WHERE comment_id = $1",
       [comment_id]
@@ -138,7 +144,10 @@ export const deleteComment = async (req, res, next) => {
       return next(ApiError.notFound("This comment does not exist"));
     }
     /* if the comment author is not equal to user send not authorized */
-    if (commentToDelete.rows[0].user_id !== user) {
+    if (
+      commentToDelete.rows[0].user_id !== userId &&
+      user.user_role === "user"
+    ) {
       return next(ApiError.notAuthorized("You are not authorized"));
     }
     await pool.query("DELETE FROM comments WHERE comment_id = $1", [
