@@ -70,7 +70,7 @@ const Login = () => {
             />
             {touched.email && data.email === "" && (
               <FormHelperText error id="my-helper-text">
-                Please enter yur Email adress
+                Please enter your Email adress
               </FormHelperText>
             )}
           </FormControl>
