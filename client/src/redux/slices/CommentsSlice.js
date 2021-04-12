@@ -6,35 +6,40 @@ import {
   getSubcomments
 } from "../actions/CommentsActions";
 import { toast } from "react-toastify";
-/* const createErrorObject = (message) => {
-  return { id: Date.now(), message };
-}; */
+
 export const commentsSlice = createSlice({
   name: "comments",
   initialState: {
     comments: [],
     loadingComments: false,
     loadingSubcomments: false,
-    subcomments: []
+    subcomments: [],
+    noComments: false,
+    noSubcomments: false
   },
   reducers: {
-    /*   deleteError: (state, action) => {
-      state.errors = state.errors.filter(
-        (error) => error.id !== action.payload
-      );
-    } */
+    resetComments: (state, action) => {
+      state.comments = [];
+      state.subcomments = [];
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getComments.pending, (state) => {
       state.loadingComments = true;
+      state.noComments = false;
     });
     builder.addCase(getComments.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.comments = [...action.payload];
+      if (action.payload.length < 1) {
+        state.noComments = true;
+      } else {
+        state.noComments = false;
+      }
       state.loadingComments = false;
     });
     builder.addCase(getComments.rejected, (state) => {
       state.loadingComments = false;
+      state.noComments = false;
     });
     builder.addCase(addComment.fulfilled, (state, action) => {
       state.comments = [action.payload, ...state.comments];
@@ -66,15 +71,24 @@ export const commentsSlice = createSlice({
     });
     builder.addCase(getSubcomments.pending, (state) => {
       state.loadingSubcomments = true;
+      state.noSubcomments = false;
     });
     builder.addCase(getSubcomments.fulfilled, (state, action) => {
       state.loadingSubcomments = false;
       state.subcomments = [...action.payload];
+      if (action.payload.length < 1) {
+        state.noSubcomments = true;
+      } else {
+        state.noSubcomments = false;
+      }
+    });
+    builder.addCase(getSubcomments.rejected, (state, action) => {
+      state.loadingSubcomments = false;
+      state.noSubcomments = false;
     });
   }
 });
 
-// Action creators are generated for each case reducer function
-/* export const {} = commentsSlice.actions; */
+export const { resetComments } = commentsSlice.actions;
 
 export default commentsSlice.reducer;

@@ -6,6 +6,8 @@ import { getSubcomments } from "../redux/actions/CommentsActions";
 import SingleComment from "./SingleComment";
 import CommentsList from "../components/CommentsList";
 import Spinner from "./core/Spinner";
+import { Alert } from "@material-ui/lab";
+import { Box } from "@material-ui/core";
 const SingleCommentPreview = () => {
   const { id } = useParams();
   const { subcomments, loadingSubcomments } = useSelector(
@@ -16,7 +18,8 @@ const SingleCommentPreview = () => {
     comment,
     loadingComment,
     getComment,
-    setMounted
+    setMounted,
+    error
   } = useFetchSingleComment();
   useEffect(() => {
     console.log("rajko");
@@ -29,11 +32,19 @@ const SingleCommentPreview = () => {
   }, [id]);
   return (
     <div style={{ width: "100%" }}>
-      {loadingComment && <Spinner />}
-      {comment && <SingleComment comment={comment} />}
-      {loadingSubcomments && <Spinner />}
-      {!loadingSubcomments && (
-        <CommentsList comments={subcomments} subcomments={true} />
+      {!error ? (
+        <div style={{ width: "100%" }}>
+          {loadingComment && <Spinner />}
+          {comment && <SingleComment comment={comment} />}
+          {loadingSubcomments && <Spinner />}
+          {!loadingSubcomments && (
+            <CommentsList comments={subcomments} subcomments={true} />
+          )}
+        </div>
+      ) : (
+        <Box marginTop={3}>
+          <Alert severity="warning">{error} </Alert>
+        </Box>
       )}
     </div>
   );

@@ -6,6 +6,10 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     display: "flex",
     flexDirection: "column",
+
+    [theme.breakpoints.down("md")]: {
+      width: "25%"
+    },
     [theme.breakpoints.down("sm")]: {
       display: "none"
     }
@@ -16,9 +20,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     marginTop: "5rem",
     flexDirection: "column",
+    [theme.breakpoints.down("md")]: {
+      width: "50%"
+    },
     [theme.breakpoints.down("sm")]: {
       width: "100%"
-    }
+    },
+
+    padding: "1rem"
   },
   holder: {
     height: "100%"

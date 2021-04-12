@@ -3,7 +3,7 @@ import axios from "../utility/axiosConfiguration";
 export default function useFetchSinglePost() {
   const [post, setPost] = useState(null);
   const [loadingPost, setLoadingPost] = useState(false);
-
+  const [error, setError] = useState("");
   const getPost = async (id) => {
     try {
       setLoadingPost(true);
@@ -13,9 +13,10 @@ export default function useFetchSinglePost() {
       setLoadingPost(false);
     } catch (err) {
       setLoadingPost(false);
-      console.log(err);
+      console.log(err.response.data.msg, "asdffffffffffffffffffffffffffffffff");
+      setError(err.response.data.msg);
     }
   };
 
-  return { post, getPost, loadingPost };
+  return { post, getPost, loadingPost, error };
 }

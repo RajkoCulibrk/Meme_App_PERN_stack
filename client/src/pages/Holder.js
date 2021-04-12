@@ -9,6 +9,8 @@ import useStyles from "../materialThemes/HolderStyle";
 import MyPosts from "./MyPosts";
 import PostsILike from "./PostsILike";
 import AddNewPost from "./AddNewPost";
+import PrivateRouteNoUser from "../components/core/PrivateRouteNoUser";
+import appPlaceholder from "../images/addPlaceholder.jpg";
 export default function Holder() {
   const classes = useStyles();
 
@@ -30,15 +32,14 @@ export default function Holder() {
       <Box className={classes.main}>
         <Route exact path="/" component={Home} />
         <Route path="/post/:id" component={SinglePostPage} />
-        <Route path="/mymemes" component={MyPosts} />
-        <Route path="/liked" component={PostsILike} />
+        <PrivateRouteNoUser path="/mymemes" component={MyPosts} />
+        <PrivateRouteNoUser path="/liked" component={PostsILike} />
         <Route path="/new" component={AddNewPost} />
       </Box>
       <Box className={classes.side}>
-        <div>some side content</div>
-        <span>spancina</span>
-        <span>spancina</span>
-        <div>some content</div>
+        <Box display="flex" justifyContent="flex-end" width="70%" marginTop={9}>
+          <img src={appPlaceholder} alt="place for your add" />
+        </Box>
       </Box>
     </Box>
   );

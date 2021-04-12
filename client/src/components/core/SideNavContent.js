@@ -17,6 +17,7 @@ import { Box, TextField } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SortingAndOrdering from "./SortingAndOrdering";
 import logo from "../../images/logo_black.svg";
+import { toast } from "react-toastify";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -38,7 +39,13 @@ const useStyles = makeStyles((theme) => ({
 export default function PersistentDrawerLeft({ marginTop }) {
   const classes = useStyles();
   const location = useLocation();
-
+  const handleClick = () => {
+    if (!user) {
+      toast.info("Please sign in !", {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+    }
+  };
   const { user } = useSelector((state) => state.user);
   return (
     <div className={classes.root}>
@@ -57,6 +64,7 @@ export default function PersistentDrawerLeft({ marginTop }) {
       <Divider />
       <List>
         <Link
+          onClick={handleClick}
           style={{ color: "inherit", textDecoration: "none" }}
           to={"/mymemes"}
         >
@@ -66,6 +74,7 @@ export default function PersistentDrawerLeft({ marginTop }) {
           </ListItem>
         </Link>
         <Link
+          onClick={handleClick}
           style={{ color: "inherit", textDecoration: "none" }}
           to={"/liked"}
         >

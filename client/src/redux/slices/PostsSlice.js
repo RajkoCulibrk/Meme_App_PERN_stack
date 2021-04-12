@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deletePost, getPosts } from "../actions/PostsActions";
+import {
+  deletePost,
+  getMyPosts,
+  getPosts,
+  getLikedPosts
+} from "../actions/PostsActions";
 import { toast } from "react-toastify";
 const initialState = {
   posts: [],
@@ -8,7 +13,13 @@ const initialState = {
   like: "",
   order_by: "created_at",
   order: "2",
-  noMoreContent: false
+  noMoreContent: false,
+  myPosts: [],
+  loadingMyPosts: [],
+  likedPosts: [],
+  loadingLikedPosts: false,
+  noLikedPosts: false,
+  noMyPosts: false
 };
 export const postsSlice = createSlice({
   name: "posts",
@@ -54,9 +65,53 @@ export const postsSlice = createSlice({
       state.posts = state.posts.filter(
         (post) => post.post_id !== action.payload
       );
+      state.myPosts = state.myPosts.filter(
+        (post) => post.post_id !== action.payload
+      );
+      state.likedPosts = state.likedPosts.filter(
+        (post) => post.post_id !== action.payload
+      );
       toast.error("Post deleted successfully!", {
         position: toast.POSITION.BOTTOM_LEFT
       });
+    });
+    builder.addCase(getMyPosts.pending, (state, action) => {
+      state.loadingMyPosts = true;
+      state.noMyPosts = false;
+      state.myPosts = [];
+    });
+    builder.addCase(getMyPosts.fulfilled, (state, action) => {
+      state.loadingMyPosts = false;
+      if (action.payload.length < 1) {
+        state.noMyPosts = true;
+      } else {
+        state.noMyPosts = false;
+      }
+      state.myPosts = [...action.payload];
+    });
+    builder.addCase(getMyPosts.rejected, (state, action) => {
+      state.loadingMyPosts = false;
+      state.noMyPosts = false;
+      state.myPosts = [];
+    });
+    builder.addCase(getLikedPosts.pending, (state, action) => {
+      state.loadingLikedPosts = true;
+      state.noLikedPosts = false;
+      state.likedPosts = [];
+    });
+    builder.addCase(getLikedPosts.fulfilled, (state, action) => {
+      state.loadingLikedPosts = false;
+      if (action.payload.length < 1) {
+        state.noLikedPosts = true;
+      } else {
+        state.noLikedPosts = false;
+      }
+      state.likedPosts = [...action.payload];
+    });
+    builder.addCase(getLikedPosts.rejected, (state, action) => {
+      state.loadingLikedPosts = false;
+      state.noLikedPosts = false;
+      state.likedPosts = [];
     });
   }
 });

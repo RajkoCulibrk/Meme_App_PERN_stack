@@ -28,6 +28,44 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+export const getMyPosts = createAsyncThunk(
+  "posts/getMyPosts",
+  async (data, { rejectWithValue, dispatch, getState }) => {
+    const { posts } = getState();
+
+    try {
+      const { data } = await axios.get("posts/my");
+      return data.data.posts;
+    } catch (err) {
+      console.log(err);
+      if (err.response?.data.msg) {
+        return rejectWithValue(err.response.data.msg);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+export const getLikedPosts = createAsyncThunk(
+  "posts/getLiked",
+  async (data, { rejectWithValue, dispatch, getState }) => {
+    const { posts } = getState();
+
+    try {
+      const { data } = await axios.get("posts/liked");
+      return data.data.posts;
+    } catch (err) {
+      console.log(err);
+      if (err.response?.data.msg) {
+        return rejectWithValue(err.response.data.msg);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (

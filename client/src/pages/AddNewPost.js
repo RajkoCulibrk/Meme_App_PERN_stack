@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -23,9 +23,10 @@ import {
   Typography,
   withStyles
 } from "@material-ui/core";
-
+import { toast } from "react-toastify";
 import TimeComponent from "../components/core/TimeComponent";
 import useAddNewPost from "../hooks/AddNewPost";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,7 @@ const StyledBadge = withStyles((theme) => ({
 export default function AddNewPost() {
   const classes = singlePostStyle();
   const formClasses = useStyles();
+  const { user } = useSelector((state) => state.user);
   const {
     handleSelect,
     src,
@@ -66,6 +68,12 @@ export default function AddNewPost() {
   } = useAddNewPost();
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.info("Please sign in !", {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      return;
+    }
     submitData();
   };
   return (
@@ -103,7 +111,7 @@ export default function AddNewPost() {
           color="primary"
         >
           {submitting ? (
-            <CircularProgress color="warning" />
+            <CircularProgress color="secondary" />
           ) : (
             <Box
               display="flex"
