@@ -12,7 +12,6 @@ export default function useAddNewPost() {
   const dispatch = useDispatch();
   const history = useHistory();
   const handleSelect = (e) => {
-    console.log(e.target.files[0]);
     let reader = new FileReader();
     const file = e.target.files[0];
     reader.readAsDataURL(file);
@@ -32,13 +31,12 @@ export default function useAddNewPost() {
       toast.success("Meme uploaded successfully !", {
         position: toast.POSITION.BOTTOM_LEFT
       });
-      console.log(data.data.post);
+
       dispatch(appendPost(data.data.post));
       history.push("/");
       setSubmitting(false);
     } catch (err) {
       setSubmitting(false);
-      console.log(err.message);
     }
   };
   return { title, image, handleSelect, src, setTitle, submitData, submitting };

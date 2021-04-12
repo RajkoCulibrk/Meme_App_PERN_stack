@@ -9,7 +9,7 @@ export default function useInfiniteScrolling() {
   const dispatch = useDispatch();
   useEffect(() => {
     let dispatched = false;
-    console.log("rerender");
+
     let scroll = () => {
       let body = document.body,
         html = document.documentElement;
@@ -25,14 +25,7 @@ export default function useInfiniteScrolling() {
         !loadingPosts &&
         !noMoreContent
       ) {
-        console.log(loadingPosts, noMoreContent, page, "getting posts");
         if (!dispatched) {
-          console.log(
-            loadingPosts,
-            noMoreContent,
-            page,
-            "should be different here"
-          );
           dispatch(getPosts());
         }
         dispatched = true;
@@ -40,7 +33,6 @@ export default function useInfiniteScrolling() {
     };
     document.addEventListener("scroll", scroll);
     return function cleanup() {
-      console.log("from cleanup");
       document.removeEventListener("scroll", scroll);
     };
   }, [loadingPosts, noMoreContent, page, dispatch]);

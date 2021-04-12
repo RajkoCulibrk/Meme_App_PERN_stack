@@ -13,7 +13,7 @@ export default function useFetchSinglePost() {
       setLoadingPost(false);
     } catch (err) {
       setLoadingPost(false);
-      console.log(err.response.data.msg, "asdffffffffffffffffffffffffffffffff");
+
       setError(err.response.data.msg);
     }
   };

@@ -30,9 +30,7 @@ export const getPosts = createAsyncThunk(
 
 export const getMyPosts = createAsyncThunk(
   "posts/getMyPosts",
-  async (data, { rejectWithValue, dispatch, getState }) => {
-    const { posts } = getState();
-
+  async (data, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await axios.get("posts/my");
       return data.data.posts;
@@ -49,9 +47,7 @@ export const getMyPosts = createAsyncThunk(
 
 export const getLikedPosts = createAsyncThunk(
   "posts/getLiked",
-  async (data, { rejectWithValue, dispatch, getState }) => {
-    const { posts } = getState();
-
+  async (data, { rejectWithValue }) => {
     try {
       const { data } = await axios.get("posts/liked");
       return data.data.posts;

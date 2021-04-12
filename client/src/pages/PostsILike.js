@@ -12,6 +12,7 @@ const PostsILike = () => {
   /* const { posts, loading, getPosts } = useFetchMyPosts(); */
   useEffect(() => {
     dispatch(getLikedPosts());
+    // eslint-disable-next-line
   }, []);
   return (
     <div style={{ width: "100%" }}>

@@ -50,7 +50,6 @@ export default function SingleComment({ comment }) {
   } = useLikeDislike(true);
 
   useEffect(() => {
-    console.log("rendering single comment");
     if (user) {
       checkLikingStatus(comment.comment_id);
 

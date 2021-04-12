@@ -5,12 +5,9 @@ import { Box } from "@material-ui/core";
 import { useSelector } from "react-redux";
 
 const CommentsList = ({ comments, subcomments }) => {
-  const {
-    noComments,
-    noSubcomments,
-    loadingComments,
-    loadingSubcomments
-  } = useSelector((state) => state.comments);
+  const { loadingComments, loadingSubcomments } = useSelector(
+    (state) => state.comments
+  );
   return (
     <Box
       display="flex"

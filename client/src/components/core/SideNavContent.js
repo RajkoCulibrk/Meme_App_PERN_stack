@@ -9,11 +9,10 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { Link, useHistory, useLocation } from "react-router-dom";
+
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Box, TextField } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SortingAndOrdering from "./SortingAndOrdering";
 import logo from "../../images/logo_black.svg";

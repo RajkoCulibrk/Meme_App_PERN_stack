@@ -35,8 +35,6 @@ export const postsSlice = createSlice({
       state.noMoreContent = false;
     },
     sortingAndOrdering: (state, action) => {
-      console.log(action.payload, "from reducer");
-
       state.page = 1;
       state.posts = [];
       state.noMoreContent = false;
@@ -46,7 +44,6 @@ export const postsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getPosts.pending, (state, action) => {
-      console.log(state.order, "this is the order");
       state.loadingPosts = true;
     });
     builder.addCase(getPosts.fulfilled, (state, action) => {

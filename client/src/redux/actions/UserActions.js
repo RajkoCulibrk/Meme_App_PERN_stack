@@ -5,7 +5,6 @@ import axios from "../../utility/axiosConfiguration";
 export const login = createAsyncThunk(
   "user/login",
   async (data, { rejectWithValue, dispatch }) => {
-    console.log(data);
     try {
       const response = await axios.post("auth/login", data);
       localStorage.setItem("token", response.data.data.token);
@@ -27,7 +26,6 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "user/register",
   async (data, { rejectWithValue, dispatch }) => {
-    console.log(data);
     try {
       const response = await axios.post("auth/register", data);
       localStorage.setItem("token", response.data.data.token);
@@ -49,10 +47,9 @@ export const register = createAsyncThunk(
 export const getUser = createAsyncThunk(
   "user/getUser",
   async (_, { rejectWithValue }) => {
-    console.log("getting user");
     try {
       const response = await axios.get("auth/user");
-      console.log("user", response.data.data.user);
+
       localStorage.setItem("user", JSON.stringify(response.data.data.user));
       return response.data.data.user;
     } catch (err) {

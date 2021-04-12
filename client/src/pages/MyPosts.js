@@ -15,6 +15,7 @@ const MyPosts = () => {
   /* const { posts, loading, getPosts } = useFetchMyPosts(); */
   useEffect(() => {
     dispatch(getMyPosts());
+    // eslint-disable-next-line
   }, []);
   return (
     <div style={{ width: "100%" }}>

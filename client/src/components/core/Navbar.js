@@ -114,7 +114,7 @@ export default function PrimarySearchAppBar() {
     dispatch(logout());
   };
   const location = useLocation();
-
+  const nav = useRef();
   const handleSearch = (e) => {
     dispatch(search(e.target.value));
     dispatch(getPosts());
@@ -131,13 +131,12 @@ export default function PrimarySearchAppBar() {
   };
 
   useEffect(() => {
-    const navbar = document.querySelector(".makeStyles-navbar-12");
     document.addEventListener("scroll", () => {
       let scrolled = window.pageYOffset;
       if (current.current - scrolled < 0) {
-        navbar.style.transform = "translateY(-120%)";
+        nav.current.style.transform = "translateY(-120%)";
       } else {
-        navbar.style.transform = "translateY(0%)";
+        nav.current.style.transform = "translateY(0%)";
       }
 
       current.current = window.pageYOffset;
@@ -245,7 +244,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar className={classes.navbar} position="static">
+      <AppBar ref={nav} className={classes.navbar} position="static">
         <Toolbar>
           <IconButton
             onClick={handleSidenavOpening}

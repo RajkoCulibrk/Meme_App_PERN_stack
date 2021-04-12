@@ -22,7 +22,6 @@ const SingleCommentPreview = () => {
     error
   } = useFetchSingleComment();
   useEffect(() => {
-    console.log("rajko");
     getComment(id);
     dispatch(getSubcomments(id));
     return function cleanup() {

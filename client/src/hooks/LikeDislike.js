@@ -17,7 +17,6 @@ export default function useLikeDislike(likeComment) {
     performActionFor = "comments";
   }
   const checkLikingStatus = async (id) => {
-    console.log(mounted, "mounted");
     if (mounted) {
       try {
         const { data } = await axios.get(

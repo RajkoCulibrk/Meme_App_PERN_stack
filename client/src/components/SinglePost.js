@@ -47,7 +47,6 @@ export default function SinglePost({ post }) {
   useEffect(() => {
     let mounted = true;
     if (user && mounted) {
-      console.log(";checking");
       checkLikingStatus(post.post_id);
     }
     return function cleanup() {

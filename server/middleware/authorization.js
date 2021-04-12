@@ -21,7 +21,6 @@ export default async (req, res, next) => {
       next();
     });
   } catch (err) {
-    console.log(err.message);
     return next(
       ApiError.notAuthorized("Something went wrong with authentication")
     );

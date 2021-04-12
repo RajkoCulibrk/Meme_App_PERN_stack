@@ -23,7 +23,6 @@ export const addComment = createAsyncThunk(
   "comments/addComment",
   async (dataToSend, { rejectWithValue }) => {
     try {
-      console.log(dataToSend);
       const { data } = await axios.post(`comments`, dataToSend);
       return data.data.comment;
     } catch (err) {
@@ -42,7 +41,7 @@ export const deleteComment = createAsyncThunk(
   async ({ id, history, location, idFromUrl }, { rejectWithValue }) => {
     try {
       await axios.delete(`comments/${id}`);
-      console.log(location);
+
       if (location.pathname.includes("comment") && id === idFromUrl) {
         history.goBack();
       }
