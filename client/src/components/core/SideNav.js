@@ -59,6 +59,7 @@ export default function PersistentDrawerLeft() {
   return (
     <div className={classes.root}>
       <Drawer
+        onClick={handleDrawerClose}
         className={classes.drawer}
         variant="persistent"
         anchor="left"

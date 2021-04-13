@@ -7,9 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   background-color: rgb(236, 227, 227);
+  scroll-behavior: smooth;
 }
 html {
   height: 100vh;
+  scroll-behavior: smooth;
 }
 
 #root {

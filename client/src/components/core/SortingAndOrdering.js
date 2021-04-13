@@ -18,8 +18,11 @@ const SortingAndOrdering = () => {
     dispatch(sortingAndOrdering({ [e.target.name]: e.target.value }));
     dispatch(getPosts());
   };
+  const stopPropagation = (e) => {
+    e.stopPropagation();
+  };
   return (
-    <Box width="100%">
+    <Box onClick={(e) => stopPropagation(e)} width="100%">
       <TextField
         className={classes.select}
         select

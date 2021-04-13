@@ -12,11 +12,20 @@ import Holder from "./pages/Holder";
 import { getPosts } from "./redux/actions/PostsActions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "./components/core/ScrollToTop";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUser());
     dispatch(getPosts());
+    const toTop = document.querySelector(".to-top");
+    document.addEventListener("scroll", () => {
+      if (window.pageYOffset > 1000) {
+        toTop.style.display = "block";
+      } else {
+        toTop.style.display = "none";
+      }
+    });
   }, [dispatch]);
 
   return (
@@ -24,6 +33,7 @@ function App() {
       <Router>
         <Navbar></Navbar>
         <SideNav />
+        <ScrollToTop />
         <ToastContainer />
         <Switch>
           <PrivateRouteUser path="/login" component={Login} />
