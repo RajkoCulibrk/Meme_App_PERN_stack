@@ -51,15 +51,16 @@ export default function SingleComment({ comment }) {
 
   useEffect(() => {
     if (user) {
+      /* if user is logged in check if he has liked the comment or not based on the comment id */
       checkLikingStatus(comment.comment_id);
-
+      /* on unmount set mounted to false so we avoid memory leaks */
       return function cleanup() {
         setMounted(false);
       };
     }
     // eslint-disable-next-line
   }, []);
-
+  /* handle delete comment */
   const handleDelete = () => {
     dispatch(
       deleteComment({
@@ -73,7 +74,7 @@ export default function SingleComment({ comment }) {
   const [expanded, setExpanded] = useState(false);
 
   const url = `/post/${comment.post_id}/comment/${comment.reply_to}`;
-
+  /* handle if reply to a comment component is going to be shown or not */
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -85,15 +86,6 @@ export default function SingleComment({ comment }) {
             {comment.user_name.charAt(0).toUpperCase()}
           </Avatar>
         }
-        /*  action={
-          user?.user_id === comment.user_id ? (
-            <IconButton onClick={handleDelete} aria-label="settings">
-              <DeleteIcon color="secondary" />
-            </IconButton>
-          ) : (
-            ""
-          )
-        } */
         title={
           <Box
             display="flex"
@@ -105,13 +97,9 @@ export default function SingleComment({ comment }) {
                 comment.user_name.substring(1)}
             </span>
             {comment.parrent_comment_author && (
+              /* link to the comment that is a parrent comment of this comment */
               <Link style={{ textDecoration: "none" }} to={url}>
-                <Typography
-                  /*   onClick={() => navigate()} */
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
+                <Typography variant="body2" color="textSecondary" component="p">
                   in reply to{" "}
                   {comment.parrent_comment_author.charAt(0).toUpperCase() +
                     comment.parrent_comment_author.substring(1)}
@@ -124,6 +112,7 @@ export default function SingleComment({ comment }) {
       />
 
       <CardContent>
+        {/* link to see the preview of this comment and its replies */}
         <Link
           style={{ color: "inherit", textDecoration: "none" }}
           to={`/post/${comment.post_id}/comment/${comment.comment_id}`}

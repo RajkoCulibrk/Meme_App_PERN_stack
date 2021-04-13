@@ -12,13 +12,14 @@ const MyPosts = () => {
     (state) => state.posts
   );
   const dispatch = useDispatch();
-  /* const { posts, loading, getPosts } = useFetchMyPosts(); */
+
   useEffect(() => {
     dispatch(getMyPosts());
     // eslint-disable-next-line
   }, []);
   return (
     <div style={{ width: "100%" }}>
+      {/* display the following message if noMyPosts is true */}
       {noMyPosts && (
         <Alert severity="info">
           <Link style={{ color: "inherit", textDecoration: "none" }} to="/new">
@@ -27,7 +28,9 @@ const MyPosts = () => {
           .{" "}
         </Alert>
       )}
+      {/* show spinner if loading */}
       {loadingMyPosts && <Spinner />}
+      {/* render posts */}
       {myPosts.map((post) => (
         <SinglePost key={post.post_id} post={post} />
       ))}

@@ -66,14 +66,17 @@ export default function AddNewPost() {
     submitting,
     image
   } = useAddNewPost();
+  /* submit form */
   const handleSubmit = (e) => {
     e.preventDefault();
+    /* if we are not logged in display please logg in */
     if (!user) {
       toast.info("Please sign in !", {
         position: toast.POSITION.BOTTOM_LEFT
       });
       return;
     }
+    /* submit data to server */
     submitData();
   };
   return (
@@ -110,6 +113,7 @@ export default function AddNewPost() {
           variant="contained"
           color="primary"
         >
+          {/* if submitting is true display spinner */}
           {submitting ? (
             <CircularProgress color="secondary" />
           ) : (
@@ -125,6 +129,7 @@ export default function AddNewPost() {
       </form>
       <Card className={classes.root}>
         <CardHeader
+          /* if title is true display the actual title that user has entered if not display placeholder title */
           title={title ? title : "The title of your meme"}
           subheader={<TimeComponent date={Date.now()} />}
         />
@@ -133,6 +138,7 @@ export default function AddNewPost() {
           <CardMedia
             component="img"
             className={classes.media}
+            /* if the user has chosen an image display that image else display placeholder image */
             image={src ? src : muchPlaceholder}
             title="Paella dish"
           />

@@ -14,10 +14,13 @@ const SortingAndOrdering = () => {
   const { order, order_by } = useSelector((state) => state.posts);
 
   const classes = useStyles();
+  /* handle select input change */
   const handleChange = (e) => {
     dispatch(sortingAndOrdering({ [e.target.name]: e.target.value }));
     dispatch(getPosts());
   };
+  /* stop event propagation so that when we click on sorting we do not close the navbar
+   */
   const stopPropagation = (e) => {
     e.stopPropagation();
   };

@@ -20,13 +20,14 @@ const Login = () => {
   const dispatch = useDispatch();
   const [data, handleChange, errors] = useInput();
   const { errors: errorMessages } = useSelector((state) => state.user);
+  /* shows if inputs have been touched or not */
   const [touched, setTouched] = useState({
     name: false,
     email: false,
     password: false,
     confirmPassword: false
   });
-
+  /* handle submit */
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, password, email } = data;
@@ -153,6 +154,7 @@ const Login = () => {
 
           <Box m={2}>
             <Button
+              /* disable submit if data is invalid or missing  */
               disabled={
                 errors.passwordMissmatch ||
                 errors.passwordLength ||

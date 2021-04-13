@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openCloseSideNav } from "../../redux/slices/UtilitySlice";
 import SideNavContent from "../core/SideNavContent";
 import { Box } from "@material-ui/core";
-
+/* the width of the sidenav */
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +51,7 @@ export default function PersistentDrawerLeft() {
     utility: { sideNavOpen },
     user: { user }
   } = useSelector((state) => state);
-
+  /* show or hide the sidenab */
   const handleDrawerClose = () => {
     dispatch(openCloseSideNav());
   };
@@ -69,6 +69,7 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <div className={classes.drawerHeader}>
+          {/* show the name of the logged  user if there is one */}
           {user && (
             <Box
               className={classes.capitalize}
@@ -90,6 +91,7 @@ export default function PersistentDrawerLeft() {
             )}
           </IconButton>
         </div>
+        {/* the actual content to display in the sidenav */}
         <SideNavContent />
       </Drawer>
     </div>

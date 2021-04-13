@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "../../utility/axiosConfiguration";
-
+/* get comments thunk */
 export const getComments = createAsyncThunk(
   "comments/getComments",
   async (id, { rejectWithValue, dispatch }) => {
@@ -18,7 +18,7 @@ export const getComments = createAsyncThunk(
     }
   }
 );
-
+/* add comment thunk it will post coment of a post or a reply to a comment depending on the dataToSend parameter */
 export const addComment = createAsyncThunk(
   "comments/addComment",
   async (dataToSend, { rejectWithValue }) => {
@@ -35,13 +35,13 @@ export const addComment = createAsyncThunk(
     }
   }
 );
-
+/* delete comment thunk */
 export const deleteComment = createAsyncThunk(
   "comments/deleteComment",
   async ({ id, history, location, idFromUrl }, { rejectWithValue }) => {
     try {
       await axios.delete(`comments/${id}`);
-
+      /* if we are on the page singleCommentPreview  and we delete the comment we are previewing we will be sent to previous page */
       if (location.pathname.includes("comment") && id === idFromUrl) {
         history.goBack();
       }
@@ -56,7 +56,7 @@ export const deleteComment = createAsyncThunk(
     }
   }
 );
-
+/* get subcomments thunk get comments of a comment (replies) */
 export const getSubcomments = createAsyncThunk(
   "comments/getSubcomments",
   async (id, { rejectWithValue }) => {

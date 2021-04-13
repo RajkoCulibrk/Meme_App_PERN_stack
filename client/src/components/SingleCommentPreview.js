@@ -9,11 +9,14 @@ import Spinner from "./core/Spinner";
 import { Alert } from "@material-ui/lab";
 import { Box } from "@material-ui/core";
 const SingleCommentPreview = () => {
+  /* get comment id from the current route */
   const { id } = useParams();
   const { subcomments, loadingSubcomments } = useSelector(
     (state) => state.comments
   );
+
   const dispatch = useDispatch();
+
   const {
     comment,
     loadingComment,
@@ -21,8 +24,11 @@ const SingleCommentPreview = () => {
     setMounted,
     error
   } = useFetchSingleComment();
+
   useEffect(() => {
+    /* get current comment based on id */
     getComment(id);
+    /* get comments (replies) of the current comment */
     dispatch(getSubcomments(id));
     return function cleanup() {
       setMounted(true);
@@ -41,6 +47,7 @@ const SingleCommentPreview = () => {
           )}
         </div>
       ) : (
+        /* display error message if we fail to fetch the current comment */
         <Box marginTop={3}>
           <Alert severity="warning">{error} </Alert>
         </Box>

@@ -11,12 +11,14 @@ import PostsILike from "./PostsILike";
 import AddNewPost from "./AddNewPost";
 import PrivateRouteNoUser from "../components/core/PrivateRouteNoUser";
 import appPlaceholder from "../images/addPlaceholder.jpg";
+
 export default function Holder() {
   const classes = useStyles();
 
   return (
     <Box className={classes.holder} display="flex" flexDirection="row">
       <Box className={classes.side}>
+        {/* side content */}
         <Drawer
           className={classes.drawer}
           variant="persistent"
@@ -30,6 +32,7 @@ export default function Holder() {
         </Drawer>
       </Box>
       <Box className={classes.main}>
+        {/* routes to display in the middle of the screen */}
         <Route exact path="/" component={Home} />
         <Route path="/post/:id" component={SinglePostPage} />
         <PrivateRouteNoUser path="/mymemes" component={MyPosts} />

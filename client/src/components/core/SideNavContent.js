@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PersistentDrawerLeft({ marginTop }) {
   const classes = useStyles();
+  /* current location for dianmicly displaying certain content depending on the page we are on */
   const location = useLocation();
+  /* show the following message if the user is not logged in */
   const handleClick = () => {
     if (!user) {
       toast.info("Please sign in !", {
@@ -48,6 +50,7 @@ export default function PersistentDrawerLeft({ marginTop }) {
   const { user } = useSelector((state) => state.user);
   return (
     <div className={classes.root}>
+      {/* display the name of logged in user is user is logged in */}
       {user && marginTop && (
         <Box className={classes.capitalize} display="flex" alignItems="center">
           <AccountCircleIcon className={classes.marginRight} /> {user.user_name}
@@ -89,6 +92,7 @@ export default function PersistentDrawerLeft({ marginTop }) {
           </ListItem>
         </Link>
       </List>
+      {/* display sorting and ordering only when on homepage */}
       {location.pathname === "/" && (
         <List>
           <SortingAndOrdering />

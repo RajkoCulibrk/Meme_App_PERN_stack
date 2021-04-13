@@ -9,17 +9,20 @@ const PostsILike = () => {
     (state) => state.posts
   );
   const dispatch = useDispatch();
-  /* const { posts, loading, getPosts } = useFetchMyPosts(); */
+
   useEffect(() => {
     dispatch(getLikedPosts());
     // eslint-disable-next-line
   }, []);
   return (
     <div style={{ width: "100%" }}>
+      {/* display message if there is no liked memes */}
       {noLikedPosts && (
         <Alert severity="info">You have no liked memes . </Alert>
       )}
+      {/* show spinner if loading */}
       {loadingLikedPosts && <Spinner />}
+      {/* render posts */}
       {likedPosts.map((post) => (
         <SinglePost key={post.post_id} post={post} />
       ))}

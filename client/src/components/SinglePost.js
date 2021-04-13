@@ -41,14 +41,18 @@ export default function SinglePost({ post }) {
     likeDislike,
     setMounted
   } = useLikeDislike();
+  /* handle delete post */
   const handleDelete = () => {
     dispatch(deletePost({ id: post.post_id, history, location }));
   };
+
   useEffect(() => {
     let mounted = true;
+    /* if user is logged in check if he has liked or disliked the post */
     if (user && mounted) {
       checkLikingStatus(post.post_id);
     }
+    /* cleanup function to prevent memory leaks */
     return function cleanup() {
       setMounted(false);
     };
@@ -57,6 +61,7 @@ export default function SinglePost({ post }) {
   return (
     <Card className={classes.root}>
       <CardHeader
+        /* display delete icon only if logged in user is the one who posted the comment or he is the admin */
         action={
           user?.user_id === post.user_id || user?.user_role === "admin" ? (
             <IconButton onClick={handleDelete} aria-label="settings">

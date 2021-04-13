@@ -14,6 +14,7 @@ import { resetComments } from "../redux/slices/CommentsSlice";
 import { Alert } from "@material-ui/lab";
 
 const SinglePostPage = () => {
+  /* get post id from current route */
   const { id } = useParams();
   const dispatch = useDispatch();
   const { post, getPost, loadingPost, error } = useFetchSinglePost();
@@ -22,16 +23,21 @@ const SinglePostPage = () => {
   } = useSelector((state) => state);
 
   useEffect(() => {
+    /* get post by the id from the current route */
     getPost(id);
+    /* get posts comments */
     dispatch(getComments(id));
     return function cleanup() {
+      /* on unmount reset comments and subcomments to [] so we do not have flickering effect when viewing some other post because othervise we would see some other posts comments for a brief time */
       dispatch(resetComments());
     };
     // eslint-disable-next-line
   }, []);
   return (
     <Box display="flex" width="100%" flexDirection="column" alignItems="center">
+      {/* if loading show spinner */}
       {loadingPost && <Spinner />}
+      {/* if error while fetching display error */}
       {error ? (
         <Box marginTop={3}>
           <Alert severity="warning">{error} </Alert>

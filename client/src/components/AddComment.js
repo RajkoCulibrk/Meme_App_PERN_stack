@@ -20,6 +20,7 @@ export default function AddComment({ post_id, reply_to }) {
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
+    /* if there is no user display warning please login */
     if (!user) {
       toast.error("Please login in order to post a comment !", {
         position: toast.POSITION.BOTTOM_LEFT
@@ -28,6 +29,7 @@ export default function AddComment({ post_id, reply_to }) {
       return;
     }
     const dataToSend = { post_id, body };
+    /* id reply to exists that means we are creating a reply to a comment the logic in reducer will handle if we are going to submit a comment of a post or a comment of a comment */
     if (reply_to) {
       dataToSend["reply_to"] = reply_to;
     }

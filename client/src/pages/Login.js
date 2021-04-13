@@ -19,6 +19,7 @@ const Login = () => {
   const classes = useStyles();
   const { errors: errorMessages } = useSelector((state) => state.user);
   const [data, handleChange, errors] = useInput();
+  /* shows if input has been touched */
   const [touched, setTouched] = useState({
     name: false,
     email: false,
@@ -104,6 +105,7 @@ const Login = () => {
 
           <Box m={2}>
             <Button
+              /* disable submit if there is error or data is not valid or is missing */
               disabled={
                 errors.passwordLength ||
                 data.password === "" ||
@@ -116,7 +118,7 @@ const Login = () => {
               Submit
             </Button>
           </Box>
-
+          {/* display error message if there is one */}
           {errorMessages.map((error) => (
             <Error key={error.id} error={error} />
           ))}

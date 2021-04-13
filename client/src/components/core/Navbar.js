@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import logo from "../../images/logo.svg";
 import { openCloseSideNav } from "../../redux/slices/UtilitySlice";
 import { search } from "../../redux/slices/PostsSlice";
-import { getPosts } from "../../redux/actions/PostsActions";
+import { getPosts, getPostsSearch } from "../../redux/actions/PostsActions";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1
@@ -109,28 +109,34 @@ export default function PrimarySearchAppBar() {
     user: { user },
     posts: { like }
   } = useSelector((state) => state);
+  /* current pathname so we can dinamicly show or hide certain content for example if we are on login page we do not want to see a link to login page as we are already there */
   const { pathname } = useLocation();
+  /* logout user functionality */
   const logoutUser = () => {
     dispatch(logout());
   };
   const location = useLocation();
+  /* nav is used for accesing the navbar dom element */
   const nav = useRef();
+  /* handle search input value change */
   const handleSearch = (e) => {
     dispatch(search(e.target.value));
-    dispatch(getPosts());
+    dispatch(getPostsSearch());
   };
-
+  /* reset search input value back to '' */
   const resetSearch = () => {
     dispatch(search(""));
     dispatch(getPosts());
   };
-  let current = useRef(0);
-
+  /* handle if the sidenav is to be shown or hidden */
   const handleSidenavOpening = () => {
     dispatch(openCloseSideNav());
   };
 
+  /* indicates the amount that we have scrolled form the top , ofcourse initially it is 0, but after each scrool we set it to the actual scrolled value */
+  let current = useRef(0);
   useEffect(() => {
+    /* when the navbar renders set scroll event listener to move the navbar up and hide it if we are scrolling down , and show it if we are scrolling up */
     document.addEventListener("scroll", () => {
       let scrolled = window.pageYOffset;
       if (current.current - scrolled < 0) {

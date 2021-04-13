@@ -3,8 +3,8 @@ import Fab from "@material-ui/core/Fab";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import { Box } from "@material-ui/core";
 const ScrollToTop = () => {
+  /* scroll to the top of the document */
   const handleClick = () => {
-    console.log("clicked");
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   };

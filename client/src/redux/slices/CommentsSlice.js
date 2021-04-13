@@ -6,18 +6,18 @@ import {
   getSubcomments
 } from "../actions/CommentsActions";
 import { toast } from "react-toastify";
-
+/* initial state */
+const initialState = {
+  comments: [],
+  loadingComments: false,
+  loadingSubcomments: false,
+  subcomments: []
+};
 export const commentsSlice = createSlice({
   name: "comments",
-  initialState: {
-    comments: [],
-    loadingComments: false,
-    loadingSubcomments: false,
-    subcomments: [],
-    noComments: false,
-    noSubcomments: false
-  },
+  initialState,
   reducers: {
+    /* reset comments and subcomments to [] */
     resetComments: (state, action) => {
       state.comments = [];
       state.subcomments = [];
@@ -25,23 +25,20 @@ export const commentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getComments.pending, (state) => {
+      /* set loading comments to true */
       state.loadingComments = true;
-      state.noComments = false;
     });
     builder.addCase(getComments.fulfilled, (state, action) => {
       state.comments = [...action.payload];
-      if (action.payload.length < 1) {
-        state.noComments = true;
-      } else {
-        state.noComments = false;
-      }
+
       state.loadingComments = false;
     });
     builder.addCase(getComments.rejected, (state) => {
+      /* set loading comments to false so we hide the spinner */
       state.loadingComments = false;
-      state.noComments = false;
     });
     builder.addCase(addComment.fulfilled, (state, action) => {
+      /* append newely created comment to comments an subcomments so we can display it */
       state.comments = [action.payload, ...state.comments];
       state.subcomments = [action.payload, ...state.subcomments];
     });
@@ -70,21 +67,17 @@ export const commentsSlice = createSlice({
       remove(state, action.payload);
     });
     builder.addCase(getSubcomments.pending, (state) => {
+      /* set loading comments to true so we can display the spinner */
       state.loadingSubcomments = true;
-      state.noSubcomments = false;
     });
     builder.addCase(getSubcomments.fulfilled, (state, action) => {
+      /* set loadingSubcomments to false so we hide the spinner */
       state.loadingSubcomments = false;
       state.subcomments = [...action.payload];
-      if (action.payload.length < 1) {
-        state.noSubcomments = true;
-      } else {
-        state.noSubcomments = false;
-      }
     });
     builder.addCase(getSubcomments.rejected, (state, action) => {
+      /* set loadingSubcomments to false so we hide the spinner */
       state.loadingSubcomments = false;
-      state.noSubcomments = false;
     });
   }
 });
